@@ -7,8 +7,8 @@ struct node{
     int in,b,p;
     node(){}
     node(int _b, int _p){
-        b = _b;
-        p = _p;
+        b = _b; // brust time
+        p = _p; // priority
     }
     bool operator < (const node&x){
         return p<x.p;
@@ -31,6 +31,7 @@ void pq_fcfs(int n){
     }
     avg = (double)total/(double)n;
     avgtr = (double)turnaround/(double)n;
+
     puts("priority first come first : \n\n");
     printf("Average waiting time : %lf\n",avg);
     printf("Average turn around time : %lf\n\n",avgtr);
