@@ -28,7 +28,6 @@ void srtfs(int n){
         }
         tmp = pq.top();
         pq.pop();
-
         // calculation segment
         wait += time - tmp.arr;
         if(schedule[sc].id!=tmp.id){
