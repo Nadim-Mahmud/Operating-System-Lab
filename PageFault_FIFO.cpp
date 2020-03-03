@@ -4,52 +4,36 @@ using namespace std;
 #define MX 10000000
 
 int ara[MX],frame_sz;
-int frame[MX];
-int timec[MX+MX+MX];
 int mp[MX];
 
-int putPosition(){
-    int in=0;
-    for(int i=0;i<frame_sz;i++){
-        if(frame[i]==-1) return i;
-        if(timec[frame[i]]<timec[frame[in]]){
-            in = i;
-        }
-    }
-    return in;
-}
-
-void LRU(int n){
+void FIFO(int n){
     int cn=0,i,in=0,j,mn,mni;
-
+    queue<int>q;
     memset(mp,0,sizeof mp);
-    memset(timec,0,sizeof timec);
-    memset(frame,-1,sizeof frame);
 
     for(i=0;i<n;i++){
         if(!mp[ara[i]]){
             cn++;
-            in = putPosition();
-            if(frame[in]!=-1){
-                mp[frame[in]] = 0;
+            if(q.size()>=frame_sz){
+                mp[q.front()]=0;
+                q.pop();
             }
-            frame[in] = ara[i];
-            mp[ara[i]] = 1;
+            q.push(ara[i]);
+            mp[ara[i]]=1;
         }
-        timec[ara[i]] = i;
     }
-    cout<<"LRU page fault : ";
+    cout<<"FIFO page fault : ";
     cout<<cn<<endl;
 }
 
 int main(){
     int i,j,k,l,n;
-    freopen("lru.txt","r",stdin);
+    freopen("PageFault_FIFO.txt","r",stdin);
     cin>>n>>frame_sz;
     for(i=0;i<n;i++){
         cin>>ara[i];
     }
-    LRU(n);
+    FIFO(n);
     return 0;
 }
 
