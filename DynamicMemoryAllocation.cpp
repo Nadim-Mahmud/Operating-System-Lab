@@ -33,6 +33,46 @@ void firstFit(int h, int p){
     printOutput(p);
 }
 
+void bestFit(int h, int p){
+    int i,j,in=0,mr=0;
+    for(i=0;i<p;i++){
+        allocation[i] = -1;
+        in=0;
+        for(j=0;j<h;j++){
+            if(psize[i]<=tmph[j]&&tmph[j]<=tmph[in]){
+                in = j;
+                mr=1;
+            }
+        }
+        if(mr){
+            allocation[i] = in;
+            tmph[in] -= psize[i];
+        }
+    }
+    cout<<"\n\nBest fit allocation : \n";
+    printOutput(p);
+}
+
+void worstFit(int h, int p){
+    int i,j,in=0,mr=0;
+    for(i=0;i<p;i++){
+        allocation[i] = -1;
+        in=0;
+        for(j=0;j<h;j++){
+            if(psize[i]<=tmph[j]&&tmph[j]>=tmph[in]){
+                in = j;
+                mr=1;
+            }
+        }
+        if(mr){
+            allocation[i] = in;
+            tmph[in] -= psize[i];
+        }
+    }
+    cout<<"\n\nWorst fit allocation : \n";
+    printOutput(p);
+}
+
 int main(){
     int i,j,k,l,n,m,h,p;
 
@@ -53,6 +93,12 @@ int main(){
 
     copy(hsize,hsize+h,tmph);
     firstFit(h,p);
+
+    copy(hsize,hsize+h,tmph);
+    bestFit(h,p);
+
+    copy(hsize,hsize+h,tmph);
+    worstFit(h,p);
 
     return 0;
 }
