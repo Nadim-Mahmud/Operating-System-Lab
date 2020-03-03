@@ -8,8 +8,7 @@ using namespace std;
 #define MR 1000
 
 int allocation[MP][MR];
-int maxx[MP][MR];
-int need[MP][MR];
+int request[MP][MR];
 
 int available[MP];
 int work[MP];
@@ -17,28 +16,25 @@ int finish[MP];
 
 vector<int>safeSequence;
 
-bool needCheck(int in,int r){
+bool requestCheck(int in,int r){
     for(int j=0;j<r;j++){
-        if(need[in][j]>work[j]) return 0;
+        if(request[in][j]>work[j]) return 0;
     }
     return 1;
 }
 
-
 bool safetyAlgorithm(int p,int r){
-    int cn=0,i,j,k,in=0,mr;
-    for(i=0;i<=p;i++){
+
+    int cn=0,i,j,k,in=0,mr=0;
+
+    for(i=0;i<p;i++){
         finish[i] = 0;
         work[i] = available[i];
     }
-    for(i=0;i<=p;i++){
-        for(j=0;j<=r;j++){
-            need[i][j] = maxx[i][j]-allocation[i][j];
-        }
-    }
-    mr=0;
+
     while(true){
-        if(!finish[in]&&needCheck(in,r)){
+
+        if(!finish[in]&&requestCheck(in,r)){
             for(i=0;i<r;i++){
                 work[i] += allocation[in][i];
             }
@@ -64,10 +60,19 @@ void printSequence(){
     puts("");
 }
 
+void printDeadLock(int p){
+    puts("The system is in a deadlocked state.");
+    cout<<"The Deadlocked processes are : ";
+    for(int i=0;i<p;i++){
+        if(!finish[i]) cout<<i<<" ";
+    }
+    puts("");
+}
+
 int main(){
     int i,j,k,p,r;
 
-    freopen("safetyAlgo.txt","r",stdin);
+    freopen("DeadLoackDetection.txt","r",stdin);
 
     puts("Enter number of process and number of resource : ");
     cin>>p>>r;
@@ -77,22 +82,25 @@ int main(){
         cin>>available[i];
     }
 
-    puts("Enter maximum resource instance of a program : ");
-    for(i=0;i<p;i++){
-        for(j=0;j<r;j++){
-            cin>>maxx[i][j];
-        }
-    }
-
     puts("Enter allocated resource list : ");
     for(i=0;i<p;i++)
         for(j=0;j<r;j++)
             cin>>allocation[i][j];
 
-    if(!safetyAlgorithm(p,r)) puts("No safe sequence found!");
+    puts("Enter resource requests : ");
+    for(i=0;i<p;i++){
+        for(j=0;j<r;j++){
+            cin>>request[i][j];
+        }
+    }
+
+    if(!safetyAlgorithm(p,r)){
+        printDeadLock(p);
+    }
     else{
         printSequence();
     }
 
     return 0;
 }
+
